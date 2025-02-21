@@ -2,20 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+body{
+  background:#33333380 ;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.board {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.column {
+  width: 300px;
+  background-color: #f4f5f7;
+  padding: 10px;
+  border-radius: 4px;
 }
+
+.column h3 {
+  text-align: center;
+  color: #333;
+}
+
+.status-dropdown{
+  width: 300px;
+}
+
+.ellipsis{
+  max-width: 100px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;   
+  text-overflow: ellipsis !important; 
+}
+
+.todo-list {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 4px;
+  max-height: 500px;
+  min-height: 100px;
+  overflow: auto;
+}
+
+.todo-item {
+  padding: 10px;
+  background-color: #f0f1f5;
+  margin: 5px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.todo-item:hover {
+  background-color: #dfe1e6;
+}
+
+/* .todo-list[data-status="todo"] {
+  border: 2px dashed #007bff;
+}
+
+.todo-list[data-status="in-progress"] {
+  border: 2px dashed #ffb300;
+}
+
+.todo-list[data-status="done"] {
+  border: 2px dashed #4caf50;
+} */
+
+.in-progress {
+  border: 2px solid #007bff;
+}
+
+.color-in-progress {
+  color: #007bff !important;
+}
+
+
+.color-done{
+  color: #4caf50 !important;
+}
+
+.done {
+  border: 2px solid #4caf50;
+}
+
