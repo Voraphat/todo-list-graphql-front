@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef,useCallback } from "react";
 import { useMutation } from '@apollo/client';
 import { TOGGLE_TODO , DELETE_TODO,GET_TODOS } from "../graphql/queries";
 import { useQuery } from "@apollo/client";
@@ -21,26 +21,6 @@ const [toggleTodo , {loading, error }] = useMutation(TOGGLE_TODO);
 const [deleteTodo ] = useMutation(DELETE_TODO);
 const { data } = useQuery(GET_TODOS);
 
-  useEffect(() => {
-    const todoList = todoRef.current;
-    if (todoList) {
-      todoList.addEventListener("dragover", (e) => {
-        e.preventDefault();
-      });
-
-      todoList.addEventListener("drop", (e: any) => {
-        e.preventDefault();
-        const todoId = e.dataTransfer.getData("todoId");
-        const newStatus = e.target.closest('.column')?.dataset.status;
-        if (todoId && newStatus) {
-        updateTodoStatus(todoId, newStatus);
-        }
-      });
-    }
-  }, [todos]);
-
-  
-
   const handleStatusChange = (id: number, event: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = event.target.value;
     updateTodoStatus(id, newStatus);
@@ -58,6 +38,34 @@ const { data } = useQuery(GET_TODOS);
         console.error('Error updating todo:', err);
       });
   };
+
+  const handleDragOver = useCallback((e: any) => {
+    e.preventDefault();
+  }, []);
+
+  const handleDrop = useCallback((e: any) => {
+    e.preventDefault();
+    const todoId = e.dataTransfer.getData("todoId");
+    const newStatus = e.target.closest('.column')?.dataset.status;
+    if (todoId && newStatus) {
+      updateTodoStatus(todoId, newStatus);
+    }
+  }, []);
+
+  useEffect(() => {
+    const todoList = todoRef.current;
+    if (todoList) {
+      todoList.addEventListener("dragover", handleDragOver);
+      todoList.addEventListener("drop", handleDrop);
+    }
+  
+    return () => {
+      if (todoList) {
+        todoList.removeEventListener("dragover", handleDragOver);
+        todoList.removeEventListener("drop", handleDrop);
+      }
+    };
+  }, [handleDrop, handleDragOver]);
 
   const deleteTask = (id: number) => {
     deleteTodo({

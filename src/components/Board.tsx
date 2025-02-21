@@ -9,7 +9,9 @@ import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
 
 
 const Board = () => {
-  const { data, loading, error } = useQuery(GET_TODOS);
+  const { data, loading, error } = useQuery(GET_TODOS, {
+    fetchPolicy: 'cache-and-network',
+  });  
   const [todos, setTodos] = useState<{ id:number , status: string }[]>([]);
   const [newTask, setNewTask] = useState("");
 
@@ -45,6 +47,26 @@ const Board = () => {
         .catch((err) => console.error("Error creating todo:", err));
     }
   };
+
+
+  // const handleAddTodo = () => {
+  //   if (newTask.trim()) {
+  //     addTodo({
+  //       variables: { text: newTask },
+  //       optimisticResponse: {
+  //         __typename: 'Mutation',
+  //         addTodo: {
+  //           __typename: 'Todo',
+  //           id: Math.random().toString(),
+  //           text: newTask,
+  //           status: 'todo',
+  //         },
+  //       },
+  //     })
+  //       .then(() => setNewTask(''))
+  //       .catch((err) => console.error('Error creating todo:', err));
+  //   }
+  // };
   
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
