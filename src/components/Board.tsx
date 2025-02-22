@@ -12,7 +12,7 @@ const Board = () => {
   const { data, loading, error } = useQuery(GET_TODOS, {
     fetchPolicy: 'cache-and-network',
   });  
-  const [todos, setTodos] = useState<{ id:number , status: string }[]>([]);
+  const [todos, setTodos] = useState<{ id:number , status: string ,text: string;}[]>([]);
   const [newTask, setNewTask] = useState("");
 
   const [addTodo, { loading: creating, error: createError }] = useMutation(ADD_TODO, {
