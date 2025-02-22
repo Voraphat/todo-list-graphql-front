@@ -1,18 +1,22 @@
-# ใช้ Jenkins LTS image
-FROM jenkins/jenkins:lts
+FROM node:20-alpine
 
-# สลับไปที่ root user
-USER root
+# Set working directory
+WORKDIR /app
 
-# ติดตั้ง curl และ Node.js
-RUN apt-get update && apt-get install -y git
+# Copy package.json and package-lock.json (ถ้ามี)
+COPY package*.json ./
 
-RUN apt-get update && apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
-    apt-get install -y nodejs
+# Install dependencies
+RUN npm install
 
-# ตรวจสอบการติดตั้ง Node.js และ npm
-RUN node -v && npm -v
+# Copy the rest of the application files
+COPY . .
 
-# กลับไปใช้ Jenkins user
-USER jenkins
+# Expose port (เปลี่ยนตามแอปของคุณถ้าจำเป็น)
+EXPOSE 3000
+
+# Build the application
+RUN npm run build
+
+# Start the application
+CMD npm run start
